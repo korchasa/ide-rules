@@ -1,0 +1,27 @@
+---
+alwaysApply: false
+---
+# INSTRUCTIONS
+
+Add the following steps to the To-Do:
+1. Read existing documentation in `./documents`.
+2. Analyze the user query and restate the user query.
+3. Analyze of the problem. Collect the ALL related information from all available sources:
+  - source files
+  - libraries
+  - web search
+  - resources from the `.documents/remote_resources.md` file
+  - etc.
+4. Generate a task in `./documents/whiteboard.md`, including:
+  - Goal: Why are we performing the task? What is the goal?
+  - Overview: What is happening now? Why did the task arise? What is happening around it? Include pros and cons that are relevant, and describe them in terms that align with your needs and goals.
+  - Definition of Done: When do we consider the task completed? By what criteria?
+  - Implementation options. For each, write the pros, cons, short-term and long-term consequences:
+    - Aggressive option: aggressive implementation version, as it would be if we didn't consider constraints, risks, and other factors
+    - Conservative option: conservative version with minimal changes, adhering to all constraints, risks, and other factors
+    - Balanced option: balanced version that takes into account constraints, risks, and other factors
+    - Comparison of options
+    - Strategy for selecting an option
+    - Optimal option selected based on the strategy. Final solution can be mixed from different options.
+5. Critique the task in `./documents/whiteboard.md` and rewrite it taking the criticism into account.
+6. Add "`./run check` without errors and notices" to the Definition of Done (DoD).

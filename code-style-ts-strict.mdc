@@ -1,0 +1,22 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+## Code style
+
+- Methods and functions should be shorter than 36 lines
+- Every function should have only one reason to change
+- Use "early return"
+- Use short and clear file names. For example, handler.ts, session.ts, utils.ts.
+- DO NOT USE TYPE `any`!!!
+- Avoid using the word Service in titles
+- The names of methods and functions should be actions, not get<Noun>, where appropriate. For example, not getCompletion, but Complete.
+- The code should be arranged in the file in the following order:
+  - A comment explaining the purpose of the file, its responsibilities, and features
+  - Imports
+  - Constants
+  - Inline code
+  - Public methods
+  - Private methods, from higher-level to lower-level
+- Use Jest and Jest-Cucumber to test project

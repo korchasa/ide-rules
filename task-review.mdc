@@ -1,0 +1,13 @@
+---
+description: Make review
+alwaysApply: false
+---
+# INSTRUCTIONS
+Add the following steps to the To-Do:
+1. Read the documentation
+2. Analyze all changes since the last commit for correctness and adequacy to the task (or tasks) in the whiteboard. Analyze for:
+- architectural issues
+- implementation issues
+- strategic shortcomings
+- proportionality of the solution's complexity to the task
+3. Write your conclusion in Russian in the chat. Do not details about positive aspects, only negative ones. Write a cumulative score from 1 to 100 for the quality of the changes.
