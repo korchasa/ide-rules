@@ -1,6 +1,6 @@
 # AI Roles Collection
 
-A collection of roles and rules for Cursor agents, designed to standardize work across various software development contexts.
+A collection of Cursor rules, designed to standardize work across various software development contexts.
 
 !!!WARNING!!!
 DO NOT USE THIS FILES AS IS. YOU MUST MODIFY THEM TO FIT YOUR PROJECT AND YOUR STYLE OF WORK.
