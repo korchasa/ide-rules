@@ -12,11 +12,11 @@ The main idea is to work together with the agent, keeping control over the proce
 Key Principles:
 - instruction unification (in progress): setting up a new project should boil down to selecting instructions and editing `main.mdc`;
 - splitting instructions into types:
-  + `task-*` [Apply Manual] — stages of task execution;
-  + `rules-*` [Always Apply] — working rules: tdd, code style, etc;
-  + `docs-*` [Always Apply] — documentation guidelines;
-  + `run-commands.mdc` [Always Apply] — description of console commands for project maintenance;
-  + `howto-*` [Apply Intelligent] — automatic instructions for situational tasks that may arise for the model during work;
+  + Stages (Manual Apply): stages of work over the project (`task-*`);
+  + Rules (Always Apply): working rules: tdd, code style, etc (`rules-*`);
+  + Documentation (Always Apply): documentation guidelines (`docs-*`);
+  + Project Maintenance (Always Apply): list of console commands for project maintenance (`run-commands.mdc`);
+  + Howto (Apply Intelligent): automatic instructions for situational tasks that may arise for the model during work (`howto-*`);
 - documentation as the agent's long-term memory:
   + all project documentation must reside in the repository;
   + two documentation schema options: cline-bank (7 files) and simplified (Software Requirements Specification + Software Design Specification, 4 files);
