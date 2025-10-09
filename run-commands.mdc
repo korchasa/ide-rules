@@ -7,7 +7,6 @@ alwaysApply: true
 
 Usage: ./run.ts <command> [args...]
 Commands:
-  clean               Clean build artifacts
   check               Run all checks (cleanup, formatting, linting, analyze, build, test)
   test <test_id>      Run a test by relative path.
-  help                Show this help
+  dev                 Run the project in development mode
