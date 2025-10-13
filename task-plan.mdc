@@ -24,4 +24,6 @@ Add the following steps to the To-Do:
     - Strategy for selecting an option
     - Optimal option selected based on the strategy. Final solution can be mixed from different options.
 5. Critique the task in `./documents/whiteboard.md` and rewrite it taking the criticism into account.
-6. Add "`./run check` without errors and notices" to the Definition of Done (DoD).
+6. Remove old version and critique from the file.
+7. Add "`./run check` without errors and notices" to the Definition of Done (DoD).
+8. STOP.
