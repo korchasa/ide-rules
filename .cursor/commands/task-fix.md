@@ -5,33 +5,43 @@ Diagnose and implement a minimal, safe, reproducible fix using BED-LLM with expl
 
 ## Steps
 1. **Intake**
-   - Restate the problem; gather missing critical data (env, versions, repro, logs)
-   - Collect all information about symptoms by web search
-   - Confirm environment boundaries
+   - Briefly restate the problem
+   - Read the project documentation in `./documents` directory
+   - Ask for missing critical data: repo/path, OS/version/arch, revision/commit, deps, exact repro steps, expected vs actual, logs/traces, time/resource limits
+   - Confirm environment boundaries (what is allowed)
 
 2. **Hypotheses (Sample-then-Filter)**
-   - List 5–10 candidate root causes with evidence/probes
-   - Assign coarse probabilities and normalize
+   - Propose 5–10 candidate root causes. For each: short description, key evidence for/against, a quick probe, potential fix idea, rough cost/risk
+   - Apply "sample-then-filter": drop hypotheses incompatible with known facts/logs/repro. Prevent premature collapse to too few options
+   - Assign coarse probabilities (e.g., 10/30/50/70/90) and normalize
 
 3. **Design experiments**
-   - Propose 3–5 diverse, high-EIG experiments with discrete outcomes
-   - Select max-EIG experiment and request approval
+   - Produce 3–5 diverse experiments x1..xM: targeted tests, focused logs/asserts, config/version isolation, git bisect, last-diff inspection, static analysis/lint, web search for a specific signature, repro across env matrix
+   - For each experiment define discrete outcomes Y (e.g., repro Y/N; error A/B/C; metric ↑/↓; test pass/fail; code/stack from {…})
+   - For top-K hypotheses estimate p(y | θ, x) and prior p(θ). Then estimate EIG(x) = H[Σθ p(θ)p(y|θ,x)] − Σθ p(θ) H[p(y|θ,x)]. Do not use H[p(y)] alone
+   - Pick the max-EIG experiment and ASK USER TO APPROVE the pair: (current working hypothesis → experiment), including rough cost/time/risk
 
-4. **Run approved experiment**
-   - Prepare environment; isolate any diagnostic edits
-   - Execute; collect outcomes and artifacts
+4. **Run approved experiment (isolated changes)**
+   - Prepare environment: confirm baseline repro; if not already on `hypothesis/*`, create branch `hypothesis/<id>-<slug>`; otherwise reuse current branch; snapshot baseline (logs, versions)
+   - If code edits are needed for diagnostics (e.g., logging) — make the smallest atomic change. Commit: "Experiment: description (non-fix)"
+   - Run the experiment, collect outcomes Y, store artifacts, bucketize to discrete categories
 
 5. **Update beliefs**
-   - Filter/renormalize; maintain “Hypothesis Board”
-   - If ≥85% confidence and a verifiable fix exists → request approval to implement
+   - Filter out hypotheses contradicted by observations; renormalize probabilities; maintain a "Hypothesis Board"
+   - Report progress: outcomes observed, how probabilities changed, what was ruled out
+   - Branching:
+     a) If the working hypothesis is strongly supported (e.g., ≥85%) and a verifiable fix exists — go to step 6 (after user confirmation)
+     b) If the hypothesis is weakened/falsified — PERFORM ROLLBACK: return to a clean state (git restore/reset, drop branch/clean worktree), document what was learned, and return to step 3
+     c) Otherwise — generate a new experiment set, rank by EIG, and request approval
 
 6. **Implement the fix**
-   - Use `fix/<id>-<slug>` branch; minimal localized change + regression test
-   - Run checks, compare before/after, present results; request MERGE/ITERATE
+   - Switch to or create `fix/<id>-<slug>`: if already on `fix/*`, reuse the current branch; otherwise create a new one. Implement a minimal localized patch + regression/repro test. Update docs if needed
+   - Run tests/linters/profiling; compare "before/after" for repro and key metrics
+   - Present diff summary, risk/scope, verification results. Ask user for "MERGE/ITERATE." Never push without explicit approval
 
-7. **Wrap-up**
-   - Deliver patch/branch, logs, repro commands, tests, root-cause narrative
-   - Provide follow-ups
+7. **Wrap-up / escalation**
+   - Success: deliver artifacts (patch/branch, logs, repro commands, new tests), a concise root-cause narrative (why the fix works), and follow-ups
+   - If not solved within budget: provide best current diagnosis, remaining hypotheses with probabilities, and a next-steps plan with highest EIG
 
 ## Checklist
 - [ ] Problem restated; critical context collected
@@ -40,46 +50,6 @@ Diagnose and implement a minimal, safe, reproducible fix using BED-LLM with expl
 - [ ] Beliefs updated; board maintained
 - [ ] Minimal fix implemented with tests
 - [ ] Quality gates passed and results shared
-
-## Algorithm (BED-LLM)
-0) Intake
-   - Briefly restate the problem.
-   - Read the project documentation in `./documentation` directory.
-   - Ask for missing critical data: repo/path, OS/version/arch, revision/commit, deps, exact repro steps, expected vs actual, logs/traces, time/resource limits.
-   - Confirm environment boundaries (what is allowed).
-
-1) Hypothesis initialization (Sample-then-Filter)
-   - Propose 5–10 candidate root causes. For each: short description, key evidence for/against, a quick probe, potential fix idea, rough cost/risk.
-   - Apply “sample-then-filter”: drop hypotheses incompatible with known facts/logs/repro. Prevent premature collapse to too few options.
-   - Assign coarse probabilities (e.g., 10/30/50/70/90) and normalize.
-
-2) Generate candidate experiments (questions/actions)
-   - Produce 3–5 diverse experiments x1..xM: targeted tests, focused logs/asserts, config/version isolation, git bisect, last-diff inspection, static analysis/lint, web search for a specific signature, repro across env matrix.
-   - For each experiment define discrete outcomes Y (e.g., repro Y/N; error A/B/C; metric ↑/↓; test pass/fail; code/stack from {…}).
-   - For top-K hypotheses estimate p(y | θ, x) and prior p(θ). Then estimate EIG(x) = H[Σθ p(θ)p(y|θ,x)] − Σθ p(θ) H[p(y|θ,x)]. Do not use H[p(y)] alone.
-   - Pick the max-EIG experiment and ASK USER TO APPROVE the pair: (current working hypothesis → experiment), including rough cost/time/risk.
-
-3) Execute the approved experiment (isolated changes)
-   - Prepare environment: confirm baseline repro; if not already on `hypothesis/*`, create branch `hypothesis/<id>-<slug>`; otherwise reuse current branch; snapshot baseline (logs, versions).
-   - If code edits are needed for diagnostics (e.g., logging) — make the smallest atomic change. Commit: “Experiment: <desc> (non-fix)”.
-   - Run the experiment, collect outcomes Y, store artifacts, bucketize to discrete categories.
-
-4) Update beliefs and decide
-   - Filter out hypotheses contradicted by observations; renormalize probabilities; maintain a “Hypothesis Board.”
-   - Report progress: outcomes observed, how probabilities changed, what was ruled out.
-   - Branching:
-     a) If the working hypothesis is strongly supported (e.g., ≥85%) and a verifiable fix exists — go to step 5 (after user confirmation).
-     b) If the hypothesis is weakened/falsified — PERFORM ROLLBACK: return to a clean state (git restore/reset, drop branch/clean worktree), document what was learned, and return to step 2.
-     c) Otherwise — generate a new experiment set, rank by EIG, and request approval.
-
-5) Implement the fix
-   - Switch to or create `fix/<id>-<slug>`: if already on `fix/*`, reuse the current branch; otherwise create a new one. Implement a minimal localized patch + regression/repro test. Update docs if needed.
-   - Run tests/linters/profiling; compare “before/after” for repro and key metrics.
-   - Present diff summary, risk/scope, verification results. Ask user for “MERGE/ITERATE.” Never push without explicit approval.
-
-6) Wrap-up / escalation
-   - Success: deliver artifacts (patch/branch, logs, repro commands, new tests), a concise root-cause narrative (why the fix works), and follow-ups.
-   - If not solved within budget: provide best current diagnosis, remaining hypotheses with probabilities, and a next-steps plan with highest EIG.
 
 ## Turn-by-turn output format
 - Summary: 2–4 sentences.
@@ -98,4 +68,4 @@ Diagnose and implement a minimal, safe, reproducible fix using BED-LLM with expl
 ## Hints to boost EIG in engineering
 - Prefer experiments that “slice” the hypothesis space: version/flag toggles, minimal repros, dep/config isolation, git bisect on recent changes, targeted logs around control-flow forks.
 - Ask the user multiple-choice questions (with “None of the above”) to keep outcomes discrete and informative.
-- For web search, discretize outcomes: “≥2 matching issues with the same stack,” “official regression in version X,” “workaround confirmed,” etc.
+- For web search, discretize outcomes: "≥2 matching issues with the same stack," "official regression in version X," "workaround confirmed," etc.

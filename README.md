@@ -5,6 +5,32 @@ A collection of Cursor rules, designed to standardize work across various softwa
 !!!WARNING!!!
 DO NOT USE THIS FILES AS IS. YOU MUST MODIFY THEM TO FIT YOUR PROJECT AND YOUR STYLE OF WORK.
 
+## Using Commands in Cursor
+
+Cursor supports custom commands that create reusable workflows launched with `/` prefix in chat input. This helps standardize team processes and speeds up typical tasks.
+
+### How Commands Work
+
+1. Commands are stored in `.cursor/commands/` directory as `.md` files
+2. Type `/` in chat to see available commands
+3. Commands provide structured workflows for development activities
+4. Each command contains detailed instructions for specific tasks
+
+### Available Commands
+
+Use these commands by typing `/task-*` in Cursor chat:
+
+- `/task-commit` - Git commit workflow following Conventional Commits
+- `/task-execute` - Execute and implement planned tasks
+- `/task-fix` - Fix errors, warnings, and linting problems
+- `/task-github-issue-create` - Create GitHub issues using GODS framework
+- `/task-investigate` - Investigate and analyze codebase issues
+- `/task-plan` - Plan and break down complex development tasks
+- `/task-review` - Review code changes and implementation
+- `/task-update-docs` - Update project documentation
+
+For more information, see [Cursor Commands Documentation](https://cursor.com/docs/agent/chat/commands).
+
 ## Framework
 
 The main idea is to work together with the agent, keeping control over the process and acting as a guardrail between stages, explicitly switching them using `/task-*` command syntax.
@@ -28,7 +54,7 @@ Key Principles:
 ## Available Components
 
 ### Task Commands
-Task commands provide guided workflows for specific development activities:
+Task commands provide guided workflows for specific development activities (use with `/task-*` in Cursor chat):
 
 - `task-commit.md` - Commit workflow following Conventional Commits (strict)
 - `task-execute.md` - Execute and implement planned tasks
