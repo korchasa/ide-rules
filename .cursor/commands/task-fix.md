@@ -1,26 +1,45 @@
----
-description: fix the issue
-alwaysApply: false
----
-# WORKFLOW
+# Bug Fix Workflow
 
-## Role and goal
-- You are a senior debugging engineer. Given the user’s first message (bug description), diagnose the root cause and implement a minimal, safe, reproducible fix.
-- Use BED-LLM (Sequential Bayesian Experimental Design): at every turn choose the next question/experiment/action (incl. web search, running tools, reading logs, minimal code edits) to maximize the Expected Information Gain (EIG) about the current root-cause hypothesis.
-- Important: before any code modifications, confirm with the user the CURRENT working hypothesis and the planned experiment. Report progress after every step. If a hypothesis is not supported, roll back changes to avoid overlapping modifications.
+## Overview
+Diagnose and implement a minimal, safe, reproducible fix using BED-LLM with explicit user approval for experiments and fixes.
 
-Allowed tools (ask for confirmation the first time per class of operation)
-- git (branches, commits, revert, worktree), shell, test runner, profilers/linters/static analysis, package managers, containers.
-- Local diagnostics (logs/dumps/tracing), system info, network checks.
-- Web search and reading docs/issue trackers. Always cite sources.
-- Code editing. Use a dedicated branch per issue; if already on the correct `hypothesis/*` or `fix/*` branch, do not create a new one. Keep changes minimal and atomic with clear commit messages.
+## Steps
+1. **Intake**
+   - Restate the problem; gather missing critical data (env, versions, repro, logs)
+   - Collect all information about symptoms by web search
+   - Confirm environment boundaries
 
-## General principles
-- Strictly separate “diagnostic experiment” from “production fix.”
-- Keep changes small and scoped; increase observability (targeted logs/asserts/flags).
-- Use discrete experiment outcomes (yes/no, repro/no repro, test pass/fail, error code bucket, metric up/down). This is key for proper EIG.
-- Do not replace EIG with predictive entropy. Include both terms: predictive uncertainty and expected likelihood entropy.
-- Avoid secrets leakage, destructive commands, and long-running tasks without consent. Do not push to remote without explicit approval.
+2. **Hypotheses (Sample-then-Filter)**
+   - List 5–10 candidate root causes with evidence/probes
+   - Assign coarse probabilities and normalize
+
+3. **Design experiments**
+   - Propose 3–5 diverse, high-EIG experiments with discrete outcomes
+   - Select max-EIG experiment and request approval
+
+4. **Run approved experiment**
+   - Prepare environment; isolate any diagnostic edits
+   - Execute; collect outcomes and artifacts
+
+5. **Update beliefs**
+   - Filter/renormalize; maintain “Hypothesis Board”
+   - If ≥85% confidence and a verifiable fix exists → request approval to implement
+
+6. **Implement the fix**
+   - Use `fix/<id>-<slug>` branch; minimal localized change + regression test
+   - Run checks, compare before/after, present results; request MERGE/ITERATE
+
+7. **Wrap-up**
+   - Deliver patch/branch, logs, repro commands, tests, root-cause narrative
+   - Provide follow-ups
+
+## Checklist
+- [ ] Problem restated; critical context collected
+- [ ] Hypotheses enumerated with probabilities
+- [ ] Max-EIG experiment approved and executed
+- [ ] Beliefs updated; board maintained
+- [ ] Minimal fix implemented with tests
+- [ ] Quality gates passed and results shared
 
 ## Algorithm (BED-LLM)
 0) Intake
@@ -80,5 +99,3 @@ Allowed tools (ask for confirmation the first time per class of operation)
 - Prefer experiments that “slice” the hypothesis space: version/flag toggles, minimal repros, dep/config isolation, git bisect on recent changes, targeted logs around control-flow forks.
 - Ask the user multiple-choice questions (with “None of the above”) to keep outcomes discrete and informative.
 - For web search, discretize outcomes: “≥2 matching issues with the same stack,” “official regression in version X,” “workaround confirmed,” etc.
-
-— Start: wait for the bug description and begin at step 0.
