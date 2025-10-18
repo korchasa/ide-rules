@@ -21,20 +21,15 @@ Diagnose the root cause without production code modifications using BED-LLM and 
    - For top-K hypotheses estimate p(y | θ, x) and prior p(θ). Then estimate EIG(x) = H[Σθ p(θ)p(y|θ,x)] − Σθ p(θ) H[p(y|θ,x)]. Do not use H[p(y)] alone
    - Pick the max-EIG experiment and ASK USER TO APPROVE the pair: (current working hypothesis → experiment), including rough cost/time/risk
 
-4. **Execute approved experiment (isolated changes)**
-   - Prepare environment: confirm baseline repro; if not already on `hypothesis/*`, create branch `hypothesis/<id>-<slug>`; otherwise reuse current branch; snapshot baseline (logs, versions)
-   - If code edits are needed for diagnostics (e.g., logging) — make the smallest atomic change. Commit: "Experiment: description (non-fix)"
-   - Run the experiment, collect outcomes Y, store artifacts, bucketize to discrete categories
-
-5. **Update beliefs and decide**
+4. **Update beliefs and decide**
    - Filter out hypotheses contradicted by observations; renormalize probabilities; maintain a "Hypothesis Board"
    - Report progress: outcomes observed, how probabilities changed, what was ruled out
    - Branching:
      a) If the working hypothesis is strongly supported (e.g., ≥85%) and a verifiable fix exists — go to step 6 (after user confirmation)
-     b) If the hypothesis is weakened/falsified — PERFORM ROLLBACK: return to a clean state (git restore/reset, drop branch/clean worktree), document what was learned, and return to step 3
+     b) If the hypothesis is weakened/falsified — PERFORM ROLLBACK: return to a clean state, document what was learned, and return to step 3
      c) Otherwise — generate a new experiment set, rank by EIG, and request approval
 
-6. **Restore baseline**
+5. **Restore baseline**
    - Remove any diagnostic code modifications and ensure a clean worktree
 
 ## Checklist
@@ -43,7 +38,6 @@ Diagnose the root cause without production code modifications using BED-LLM and 
 - [ ] Experiments defined with discrete outcomes and EIG
 - [ ] Approval obtained for the chosen experiment
 - [ ] Outcomes collected; beliefs updated; board maintained
-- [ ] Fix implemented with tests (if applicable)
 - [ ] Quality gates passed and results shared
 - [ ] Baseline restored (no stray changes)
 

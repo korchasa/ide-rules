@@ -4,33 +4,37 @@
 Create a clear, critiqued plan in `./documents/whiteboard.md` with options analysis and DoD, then stop for execution.
 
 ## Steps
-1. **Preparation**
-   - Read all docs in `./documents`
-   - Analyze and restate the user query
-
-2. **Problem analysis and research**
-   - Collect all relevant information: source files, libraries, web, `.documents/remote_resources.md`, etc.
-
-3. **Plan drafting in `whiteboard.md`**
+0. **Detect user query language and set the task language accordingly**
+1. **Read all docs in `./documents`**
+2. **Analyze and restate the user query**
+3. **Collect all relevant information**
+   - Analyze the codebase
+   - Make a search on the internet
+4. **Ask user for missing information and STOP for user input**
+Do not ask for insignificant information or information that can be easily found by analysis, in code, documentation, on the internet, and so on.
+5. **Plan drafting in `whiteboard.md`**
    - Goal: Why are we performing the task? What is the business goal?
    - Overview: What is happening now? Why did the task arise? What is happening around it?
    - Definition of Done: acceptance criteria (include "`./run check` without errors and notices")
-   - Implementation options: aggressive, conservative, balanced
-   - For each option: pros/cons, short-/long-term consequences
-   - Compare options, define selection strategy, select optimal or mixed solution
-
-4. **Critique and rewrite**
-   - Critique the plan directly in `whiteboard.md`
-   - Rewrite the plan considering the critique
-   - Remove the old version and critique from the file
-
-5. **Stop**
-   - End after planning; execution is separate
+   - Resolution options: Generate 3-5 implementation variants with pros/cons, short/long-term consequences, comparison and selection strategy, optimal option.
+6. **Critique the plan directly in `whiteboard.md`**
+7. **Rewrite the plan considering the critique**
+8. **Remove the old version and critique from the file**
+9. **Ask user to select the optimal variant and STOP for user input**
+10. **Remove all other variants from the file**
+11. **Stop**
 
 ## Checklist
-- [ ] Documentation read; query restated
+- [ ] Language set according to user query language
+- [ ] Documentation read
+- [ ] Query restated
 - [ ] Facts gathered from all sources
+- [ ] Missing information asked for and user input received
 - [ ] Plan drafted with Goal/Overview/DoD/Options
-- [ ] DoD includes clean `./run check`
-- [ ] Plan critiqued and rewritten; old version removed
+- [ ] Resolution options created with pros/cons, short/long-term consequences, comparison and selection strategy, optimal option
+- [ ] Resolution options critiqued and rewritten
+- [ ] Optimal resolution option selected by user
+- [ ] All other resolution options removed from the file
+- [ ] no open questions without answers
+- [ ] no unselected resolution options
 - [ ] Planning phase completed (stop)
