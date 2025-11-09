@@ -18,8 +18,7 @@ Guided flow to prepare, commit, and publish changes following Conventional Commi
 
 4. **Publish**
    - Push the commit to GitHub
-   - Create a pull request via `gh pr create`
-   - Share PR URL with the requester
+   - If the current branch is not the `main`: Create a pull request via `gh pr create` and share PR link to user
 
 ## Checklist
 - [ ] Project checked with `./run check`
@@ -27,7 +26,7 @@ Guided flow to prepare, commit, and publish changes following Conventional Commi
 - [ ] Changes reviewed using `GIT_PAGER=cat`
 - [ ] Dependency changes isolated in dedicated commit
 - [ ] Commit complies with Conventional Commits (strict)
-- [ ] PR created and link shared
+- [ ] PR created and link shared (if the current branch is not the `main`)
 
 ## Conventional Commits (Strict) Quick Reference
 - Structure: `<type>(<scope>)!: <description>`; body and footers separated by blank lines
