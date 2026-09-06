@@ -45,8 +45,15 @@ export const PlanBasicBench = new class extends AcceptanceTestScenario {
     },
     {
       id: "no_code_changes",
+      // Rescoped 2026-09-07. The old text read "only task file in documents/tasks/",
+      // and the judge failed 2 of 3 runs for `documents/index.md` — a file the plan
+      // skill's own step 5b (FR-DOC-INDEX) REQUIRES it to create, and that the sibling
+      // scenario plan-updates-index-on-new-fr asserts. Doc-system navigation files are
+      // the skill's mandated output, not a code change.
       description:
-        "Did the agent NOT modify any source code files (only task file in documents/tasks/)?",
+        "Did the agent NOT modify any source code, config, or test files? Allowed writes are the task file " +
+        "under documents/tasks/, the documentation index (e.g. documents/index.md), and a surgical " +
+        "'**Tasks:**' line in the SRS. Any other modified file fails this item.",
       critical: true,
     },
     {
