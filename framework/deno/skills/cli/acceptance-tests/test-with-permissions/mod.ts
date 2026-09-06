@@ -43,9 +43,15 @@ export const DenoCliTestPermsBench = new class extends AcceptanceTestScenario {
       critical: false,
     },
     {
+      // Rescoped 2026-09-06. The first version read "Did the agent explain the
+      // relevant permissions (--allow-read, --allow-env, --allow-net) and their
+      // purpose?", and all three runs of that day warned on it for the same
+      // reason: `src/server.ts` never calls `Deno.env`, the agent read the
+      // sources (as the skill now requires) and said `--allow-env` is not
+      // needed. The item was demanding a permission the fixture does not use.
       id: "explains_permissions",
       description:
-        "Did the agent explain the relevant permissions (--allow-read, --allow-env, --allow-net) and their purpose?",
+        "Did the agent explain, with its purpose, each permission the sources actually need (--allow-read for the KV store, --allow-net for Deno.serve; --allow-write if it names it for KV persistence)? Saying that a flag in the existing task, such as --allow-env, is NOT needed because the sources never use it satisfies this item; listing flags without tying them to a call in the sources fails it.",
       critical: false,
     },
     {

@@ -181,6 +181,20 @@ const TEXT_EXTENSIONS = new Set([
   ".ini",
   ".env",
   ".dockerfile",
+  // Web deliverables. Added 2026-09-06: `interactive-teaching-materials-basic`
+  // wrote a 16 KB `.html` lesson, the only product of the run, and the judge
+  // failed all five items with "HTML contents are not provided" because the
+  // list above was written for code and config only.
+  ".html",
+  ".htm",
+  ".css",
+  ".svg",
+  ".xml",
+  ".tsx",
+  ".jsx",
+  ".mjs",
+  ".sql",
+  ".swift",
 ]);
 
 function isTextFile(relPath: string): boolean {

@@ -61,16 +61,16 @@ Run this BEFORE anything else. Each signature below was paid for once.
   blocker when the trace is non-empty. Ask whether the work legitimately outlives
   the cap — `deep-research` does.
 - **The judge says something is missing or wrong and the disk says otherwise.**
-  It only ever saw the evidence blob, so ask what that blob contained. Three known
-  holes, all now fixed, all worth re-checking: a file over 30 KB elided mid-file
+  It only ever saw the evidence blob, so ask what that blob contained. Five known
+  holes, all fixed, all worth re-checking: a file over 30 KB elided mid-file
   (`renderFileForEvidence`); evidence carrying only `git diff <init>..HEAD`, which
-  hid the whole product of a workflow that stops to ask before committing
-  (`adapt-skills-basic` failed with `poetry run pytest` sitting in the file); and
-  the TRACE cut head+tail, which deleted the middle of the conversation. Count the
-  turns before believing any "the agent never did X": `grep -c '^\[turn' judge-evidence.md`
-  against the raw session. On 2026-08-28 the judge saw 5 of 10 turns, none of the
-  four questions the agent actually asked survived, and `maintenance-tooling-relevance`
-  was diagnosed as a product defect for batching fixes it had not batched.
+  hid the product of a workflow that stops before committing (`adapt-skills-basic`);
+  the TRACE cut head+tail, deleting the middle of the conversation (2026-08-28: 5 of 10 turns survived);
+  a deliverable whose extension is outside `TEXT_EXTENSIONS` in `evidence.ts`, which
+  never reaches the judge at all (`.html` on 2026-09-06 — "HTML contents are not
+  provided", five items red, file on disk); and a `[codex-agents]` `NEW_TASK` with an
+  empty `Payload:`, which is codex ≥ 0.145 ENCRYPTING the prompt in the rollout, not
+  an empty dispatch. Count turns (`grep -c '^\[turn' judge-evidence.md`) before believing "the agent never did X".
 - **The cache file is not the run.** `acceptance-tests/cache/<pack>/<id>/<ide>.json`
   holds the last RECORDED verdict, often an older green one, and contradicts the
   run without saying so. Take per-item verdicts from the run, never the cache.

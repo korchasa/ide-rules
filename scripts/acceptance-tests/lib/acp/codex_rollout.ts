@@ -51,8 +51,19 @@ export function parseCodexRollout(jsonl: string): CodexAgentEvent[] {
       });
     } else if (p.type === "agent_message") {
       const content = Array.isArray(p.content) ? p.content : [];
+      // codex 0.145.0 writes the NEW_TASK prompt as an `encrypted_content` part next to the
+      // plaintext header. Dropping it rendered the dispatch as an empty payload, and the judge
+      // read that as "the request was never passed to the scout" (plan-affected-surface-scout,
+      // 2026-09-06). Mark the gap instead: the text is unrecoverable, its absence proves nothing.
       const text = content
-        .map((c) => str((c as Record<string, unknown>).text))
+        .map((c) => {
+          const part = c as Record<string, unknown>;
+          if (part.type === "encrypted_content") {
+            return "[payload encrypted by codex; the prompt text is not recoverable from the rollout — " +
+              "its absence here is not evidence of an empty or missing dispatch]";
+          }
+          return str(part.text);
+        })
         .filter((t) => t.length > 0)
         .join("\n");
       events.push({

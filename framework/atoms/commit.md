@@ -88,6 +88,16 @@ The project follows Conventional Commits 1.0.0 and uses a structured documentati
      - Compact formats: lists, YAML, Mermaid diagrams.
      - Concise language, abbreviations after first mention.
    - **Execute Updates**: Edit documents BEFORE proceeding to grouping.
+   - **Report the sync, one line per document**: after the edits, print a
+     `Documentation sync:` block with one line for EVERY document resolved
+     above — `<path>: updated (<section or what changed>)` or
+     `<path>: no change — <reason>`. The block is the step's output, not a
+     courtesy: a closing sentence such as "updated the SRS, SDS and README"
+     does not say which document was checked and why one was left alone, and
+     the user cannot tell a skipped document from an unaffected one.
+     (2026-09-02 and 2026-09-06: `commit-doc-sync-gate` synced all three
+     documents correctly in both runs and failed the same item both times
+     because the result was reported only as a summary sentence.)
 3. **Commit Grouping**
    - Review the diff from step 1. Determine the primary business purpose.
    - **Default: ALL changes → 1 commit.** Only split if:

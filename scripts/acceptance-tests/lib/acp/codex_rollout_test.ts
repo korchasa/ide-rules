@@ -58,6 +58,36 @@ Deno.test("parseCodexRollout keeps spawn_agent calls and inter-agent messages on
   ]);
 });
 
+const ENCRYPTED_TASK = JSON.stringify({
+  type: "response_item",
+  payload: {
+    type: "agent_message",
+    author: "/root",
+    recipient: "/root/surface_check",
+    content: [
+      {
+        type: "input_text",
+        text: "Message Type: NEW_TASK\nSender: /root\nPayload:\n",
+      },
+      { type: "encrypted_content", encrypted_content: "gAAAAABqnaQa4Bms" },
+    ],
+  },
+});
+
+Deno.test("parseCodexRollout marks an encrypted payload instead of rendering it as empty", () => {
+  // codex 0.145.0 stores the NEW_TASK payload as an `encrypted_content` part; dropping it made the
+  // dispatch read as an empty prompt and `no_fix_site_leak_to_scout` warned on
+  // plan-affected-surface-scout (2026-09-06) that the request was never passed to the scout.
+  const events = parseCodexRollout(ENCRYPTED_TASK);
+  assertEquals(events.length, 1);
+  const e = events[0];
+  if (e.kind !== "message") throw new Error("expected a message event");
+  assertStringIncludes(e.text, "Message Type: NEW_TASK");
+  assertStringIncludes(e.text, "[payload encrypted by codex");
+  assertStringIncludes(e.text, "not evidence");
+  assertEquals(e.text.includes("gAAAAAB"), false);
+});
+
 Deno.test("renderCodexAgentTrace names the agent type on the dispatch and quotes the reply", () => {
   const out = renderCodexAgentTrace(
     parseCodexRollout([SPAWN, FINAL].join("\n")),

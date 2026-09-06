@@ -56,8 +56,13 @@ export const ConfigureDenoCommandsBasicBench = new class
     },
     {
       id: "tasks_reference_scripts",
+      // Until 2026-09-06 this item read "Do the deno.json tasks point to
+      // script files in scripts/ directory (not inline complex commands)?"
+      // and failed every run in which the skill obeyed its own rule 14
+      // (single-command tasks stay inline; only orchestration gets a
+      // script). The item now tests what the rule prescribes.
       description:
-        "Do the deno.json tasks point to script files in scripts/ directory (not inline complex commands)?",
+        "Does the `check` task point to `scripts/check.ts` (orchestration needs a script), while single-command tasks such as test/dev stay inline in deno.json rather than each getting a wrapper script?",
       critical: false,
     },
     {

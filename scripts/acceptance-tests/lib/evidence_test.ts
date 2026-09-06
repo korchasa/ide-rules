@@ -154,6 +154,26 @@ Deno.test("collectGeneratedFiles carries every file the agent produced — modif
   }
 });
 
+Deno.test("collectGeneratedFiles carries the web formats a teaching or UI primitive produces — a lesson is an .html file, and the judge scored it absent", async () => {
+  // 2026-09-06: `interactive-teaching-materials-basic` failed all five items
+  // with "the HTML contents are not provided" while a 16 KB
+  // `http-request-lifecycle.html` sat untracked in the sandbox and in the
+  // FINAL GIT STATUS block. The text allowlist was written for code and
+  // config and had no `.html`, so the only deliverable never reached the judge.
+  const { root, initHash } = await sandboxWithAgentWork();
+  try {
+    await write(root, "lesson.html", "<h1>LESSON BY AGENT</h1>");
+    await write(root, "assets/styles.css", "/* CSS BY AGENT */");
+    await write(root, "diagram.svg", "<svg>SVG BY AGENT</svg>");
+    const out = await collectGeneratedFiles(root, initHash);
+    assertStringIncludes(out, "--- lesson.html ---\n<h1>LESSON BY AGENT</h1>");
+    assertStringIncludes(out, "--- assets/styles.css ---\n/* CSS BY AGENT */");
+    assertStringIncludes(out, "--- diagram.svg ---\n<svg>SVG BY AGENT</svg>");
+  } finally {
+    await Deno.remove(root, { recursive: true });
+  }
+});
+
 Deno.test("collectGeneratedFiles leaves out what the harness installed — the init commit is not the agent's product and it is what crowds the product out of the cap", async () => {
   const { root, initHash } = await sandboxWithAgentWork();
   try {

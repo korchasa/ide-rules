@@ -97,8 +97,15 @@ Rules:
 
 ## Phase 2 — Query the data tools
 
-Call the two CLI tools (paths relative to this skill dir) ONLY for the
-categories you weighted non-zero. **Always fetch with `curl` and pipe into the
+Call the two CLI tools ONLY for the categories you weighted non-zero. Run
+every command with the working directory set to the directory you read THIS
+`SKILL.md` from — the one holding `scripts/`. Do not reconstruct another skill
+root (an IDE's own `skills/.system/…` tree, a home-directory install) from a
+naming pattern: an `exec` that fails before the shell starts with `No such file
+or directory` is reporting the working directory, not a missing `deno`. A
+missing runtime says `deno: command not found`. (2026-09-06: one run set the
+workdir to a non-existent `.system/select-llm-model`, read the cwd error as
+"Deno is unavailable", and stopped without the pipe.) **Always fetch with `curl` and pipe into the
 tool with `--stdin`** — this is the ONE supported invocation form (below). Do
 NOT run the tool without the `curl … | … --stdin` pipe. A non-zero exit means
 that source is a Gap. Add `--format table` for readable output, `--top N` to cap

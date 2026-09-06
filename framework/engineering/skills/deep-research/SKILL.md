@@ -37,7 +37,7 @@ Before planning, detect the available search/fetch method. Try each in order, st
 | 3 | Playwright MCP | Check tool list for `browser_navigate` + `browser_snapshot` tools |
 | 4 | Other MCP search/fetch tools | Check tool list for any MCP tool that accepts a query string and returns results |
 
-**Output of this phase** — two variables passed to every worker:
+**Output of this phase** — printed in chat BEFORE the plan (one line: `Search method: <name> — <detection evidence>`, e.g. `built-in — WebSearch present in the tool list` or `playwright-cli — playwright-cli --version → 1.4x`), and two variables passed to every worker. The detection is an observable step, not a private conclusion: a run that names the method only inside worker prompts has skipped this phase (observed 2026-09-06, `deep-research-plan`).
 
 - `search_method`: short name, e.g. `built-in`, `playwright-cli`, `playwright-mcp`, `mcp_brave`
 - `search_instructions`: a brief how-to for that method (see examples below)
@@ -104,7 +104,7 @@ mktemp -d "${TMPDIR:-/tmp}/deep-research-XXXXXX"
 ```
 Save the returned path as `tmp_dir` — pass it to all workers and use in Phase 4–5.
 
-Output the plan as a markdown list before proceeding. Do not ask for approval — proceed automatically.
+Output the plan as a markdown list before proceeding — the COMPLETE plan: every direction with its full 3–5 query list, its acceptance criteria (source types + recency) and its output file, in the shape of the example below. Printing the plan is a precondition on spawning the first worker: a chat plan that lists only the direction names, with the queries appearing later inside worker prompts, is not the plan (observed 2026-09-06, `deep-research-plan`: three direction names printed, 15 queries visible only to the workers). Do not ask for approval — proceed automatically.
 
 **Example direction definition:**
 ```

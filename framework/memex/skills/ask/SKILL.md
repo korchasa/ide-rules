@@ -109,7 +109,9 @@ Print:
 
 If after step 3 you have not found enough information to answer the question:
 - Say so directly: `The memex does not yet cover <topic>. To fill this gap, run save with sources on <specific suggestions>.`
+- The suggestions name SOURCES — a site, a manual, a paper, a repository's docs — never the topic's parts. "Save the Tokio docs" is a source; "save documentation covering its scheduler, I/O, timers and synchronization primitives" is an inventory of the runtime taken from your own knowledge, and the checklist item that forbids fabrication reads it as one. If you cannot name a source without describing the topic, name the topic alone. (2026-09-06: `ask-honest-gap` withheld the answer and still failed its critical item on such a list inside the gap record.)
 - File an answer anyway — with `status: gap` instead of `filed` — so the gap is recorded.
+- The `log.md` entry for a gap says so: `Gap — no memex coverage; 0 citations. Filed to answers/<slug>.md.` A line that only reports `0 citations across 0 pages` records a count, not the finding.
 - Do NOT fall back on general knowledge. The whole point of the memex is that answers compound from saved sources, not from your prior knowledge.
 
 ## Constraints

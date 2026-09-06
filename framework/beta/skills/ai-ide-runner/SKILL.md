@@ -272,7 +272,13 @@ If the user asks for a model the skill's catalogue doesn't know:
 
 Never invent model IDs. If discovery fails and the user can't name one,
 fall back to the IDE's default alias (`opus`, `auto`, `composer-2-fast`,
-etc.) and tell the user which model was actually used.
+etc.) and tell the user which model was actually used. "Which model" is a
+name, never "the default": when the child runtime prints no model, name the
+alias the IDE resolves its default to (from `references/models.md` or the
+IDE's `--list-models`) and say the runtime did not echo it — `model: auto
+(Cursor's default; not reported by cursor-agent)`. (2026-09-06:
+`ai-ide-runner-single-cursor-read-only` answered "Cursor default model; the
+runtime did not report a model name" and failed the disclosure item.)
 
 ## Scope boundaries
 

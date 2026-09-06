@@ -50,6 +50,18 @@ Deno is secure by default. When using `deno run` or `deno test`, you **must** ex
 - `--allow-env`: Environment variable access.
 - `-A` or `--allow-all`: Allow everything (use with caution).
 
+Reading the sources is a precondition on answering "what permissions do I
+need" or "what is the right command", not a step you may skip when a task in
+`deno.json` already carries flags: a configured task lists what someone once
+granted, not what the code needs now. Grep the project for the calls that
+imply a flag — `Deno.openKv`, `Deno.serve`, `fetch(`, `Deno.env`,
+`Deno.readTextFile`/`readFile`, `Deno.writeTextFile`/`writeFile`,
+`Deno.cron` — and give one line per flag: the flag, the call that needs it,
+and its purpose. Name the unstable flag from the section below whenever an
+unstable API is among the hits. (2026-09-06: `cli-test-permissions` was
+answered from `deno.json` alone; the server in `src/` called `Deno.serve` and
+`Deno.openKv`, and the answer named neither `--allow-net` nor `--unstable-kv`.)
+
 ## Unstable Features
 
 Some Deno APIs require explicit opt-in via `--unstable-*` flags or `deno.json` config:
