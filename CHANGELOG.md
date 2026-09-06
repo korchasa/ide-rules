@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.14.5](https://github.com/korchasa/flowai/compare/v0.14.4...v0.14.5) (2026-09-06)
+
+
+### Bug Fixes
+
+* **acceptance-tests:** repair the 11 red scenarios of the 2026-09-06 sweep ([e9db83d](https://github.com/korchasa/flowai/commit/e9db83dc8e802b082b3b5fb88a54c969e3697e1b))
+
+
+### Agent Changes
+
+* **rules:** record three lessons from the sweep-reds ship ([8e5eb8f](https://github.com/korchasa/flowai/commit/8e5eb8f409b25344f15b77b05000c3cb92579613))
+
 ### [0.14.4](https://github.com/korchasa/flowai/compare/v0.14.3...v0.14.4) (2026-09-05)
 
 
